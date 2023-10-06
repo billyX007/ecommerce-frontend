@@ -40,7 +40,7 @@ export default function LoginForm() {
     const { token, error } = await Auth.login(data);
     if (token) {
       setCookie("auth-token", token, 30);
-      push("/");
+      push("/dashboard");
       setLoading(false);
     }
     if (error) {

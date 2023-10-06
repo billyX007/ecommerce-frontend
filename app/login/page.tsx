@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import {
-  Card,
-} from "@/app/components/ui/card";
+import { Card } from "@/app/components/ui/card";
 import LoginForm from "../components/form/LoginForm";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default function AuthenticationPage() {
+  if (cookies().get("auth-token")) redirect("/dashboard");
   return (
     <>
       <div className="container relative h-screen grid lg:max-w-none lg:grid-cols-2 lg:px-0 place-items-center">
