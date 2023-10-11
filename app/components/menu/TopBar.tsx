@@ -21,31 +21,28 @@ import {
   SheetContent,
   SheetDescription,
   SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/app/components/ui/sheet";
+import { useRouter } from "next/navigation";
 
 export default function TopBar() {
   const { setTheme } = useTheme();
+  const { push } = useRouter();
   return (
     <div className="p-4 flex items-center justify-between border-b ">
       <div className="relative z-20 flex items-center text-sm font-medium">
         <div className="md:hidden mr-4">
           <Sheet>
             <SheetTrigger>
-              <Button variant="ghost">
-                <Menu />
-              </Button>
+              <Menu />
             </SheetTrigger>
             <SheetContent side="left">
               <SheetHeader>
-                <SheetDescription>
-                  <nav>
-                    <ul className="flex flex-col gap-4">
-                      <NavMenu />
-                    </ul>
-                  </nav>
-                </SheetDescription>
+                <nav>
+                  <ul className="flex flex-col gap-4">
+                    <NavMenu />
+                  </ul>
+                </nav>
               </SheetHeader>
             </SheetContent>
           </Sheet>
@@ -92,7 +89,7 @@ export default function TopBar() {
         </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="p-0" variant="ghost">
+            <Button className="p-0 hover:bg-transparent" variant="ghost">
               <Avatar>
                 <Image
                   src="/placeholders/user.png"
@@ -109,7 +106,10 @@ export default function TopBar() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="cursor-pointer"
-              onClick={() => deleteCookie("auth-token")}
+              onClick={() => {
+                deleteCookie("auth-token");
+                push("/login");
+              }}
             >
               Logout
             </DropdownMenuItem>
