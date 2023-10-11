@@ -41,10 +41,10 @@ export default function NavMenu() {
         <li key={`__menuItem${idx}`}>
           <Link
             href={menuItem.link}
-            className={`border-b text-sm md:py-2 dark:text-white ${
+            className={`border-b text-sm md:py-2 ${
               pathname === menuItem.link
-                ? "font-semibold border-slate-900 dark:border-white"
-                : "border-white dark:border-slate-900 font-medium"
+                ? "font-semibold border-[hsl(var(--foreground))]"
+                : "border-[hsl(var(--background))] font-medium"
             }`}
           >
             {menuItem.label}
