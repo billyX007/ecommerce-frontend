@@ -74,3 +74,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+.custom-select__control {
+  @apply bg-transparent border-[hsl(var(--border))] hover:border-[hsl(var(--border))]  !important;
+}
+.custom-select__multi-value {
+  @apply bg-[hsl(var(--accent))]  !important;
+}
+.custom-select__multi-value__label {
+  @apply text-[hsl(var(--foreground))]  !important;
+}
+.custom-select__menu-list {
+  @apply text-sm text-[hsl(var(--foreground))] bg-[hsl(var(--accent))] rounded-md  !important;
+}
+.custom-select__menu {
+  @apply bg-transparent !important;
+}
+
+.custom-select__option {
+  @apply bg-[hsl(var(--accent))] cursor-pointer hover:opacity-70 !important;
+}

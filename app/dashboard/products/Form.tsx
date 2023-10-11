@@ -6,61 +6,32 @@ import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { useToast } from "@/app/components/ui/use-toast";
 import Product from "@/lib/services/ProductService";
-import { ProductDataType } from "@/types";
+import { CategoryDataType, CategoryInterface, ProductDataType } from "@/types";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { FormEvent, useCallback, useLayoutEffect, useState } from "react";
-import { notFound } from "next/navigation";
-import Category from "@/lib/services/CategoryService";
+import { FormEvent, useState } from "react";
 
-export default function Form() {
-  const [data, setData] = useState<ProductDataType>({
-    name: "",
-    price: "",
-    inStock: "",
-  });
+export default function Form({
+  productData,
+  categories,
+}: {
+  productData?: ProductDataType;
+  categories: CategoryDataType[];
+}) {
+  const [data, setData] = useState<ProductDataType>(
+    productData ?? {
+      name: "",
+      price: "",
+      inStock: "",
+    }
+  );
   const [error, setError] = useState({
     name: "",
     price: "",
     inStock: "",
   });
-  const [isNotFound, setIsNotFound] = useState(false);
-  const [categories, setCategories] = useState([]);
   const { id } = useParams();
   const { toast } = useToast();
-
-  const getProduct = useCallback(async () => {
-    const res = await Product.getOne(id as string);
-    if (res.error) {
-      toast({
-        variant: "destructive",
-        title: "Something went wrong!",
-        description: res.error,
-      });
-      setIsNotFound(true);
-    }
-    setData(res.product);
-  }, [id, toast]);
-
-  const getCategories = useCallback(async () => {
-    const res = await Category.getAll();
-    if (res.categories) {
-      setCategories(
-        res.categories.map((item: { name: string; _id: string }) => ({
-          ...item,
-          label: item.name,
-          value: item._id,
-        }))
-      );
-    }
-  }, []);
-
-  useLayoutEffect(() => {
-    if (id) {
-      getProduct();
-    }
-    getCategories();
-  }, [id, getProduct, getCategories]);
 
   async function editProduct() {
     const res = await Product.edit(data);
@@ -106,7 +77,6 @@ export default function Form() {
     if (!id) createNewProduct();
   }
 
-  if (isNotFound) return notFound();
   return (
     <form onSubmit={handleSubmitForm}>
       <div className="mb-4">
@@ -162,7 +132,7 @@ export default function Form() {
           isMulti
           value={data.categories}
           id="categoriesDropdown"
-          onChange={(value: { label: string; value: string }[]) =>
+          onChange={(value: CategoryInterface[]) =>
             setData((p) => ({
               ...p,
               categories: value,

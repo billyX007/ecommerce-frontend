@@ -4,8 +4,10 @@ export type ProductDataType = {
   price: number | string;
   inStock: number | string;
   categories?: {
-    name: any; label: string; value: string 
-}[];
+    name: any;
+    label: string;
+    value: string;
+  }[];
   tags?: string[];
 };
 
@@ -13,7 +15,12 @@ export interface List {
   [key: string]: string | List[];
 }
 
-export type CategoryDataType = {
+export interface CategoryDataType {
   _id?: string;
   name: string;
-};
+}
+
+export interface CategoryInterface extends CategoryDataType {
+  label: string;
+  value: string;
+}
