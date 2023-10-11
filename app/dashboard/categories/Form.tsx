@@ -1,36 +1,33 @@
 "use client";
 
-import ReactSelect from "@/app/components/form/ReactSelect";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { useToast } from "@/app/components/ui/use-toast";
-import Product from "@/lib/services/ProductService";
-import { ProductDataType } from "@/types";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FormEvent, useCallback, useLayoutEffect, useState } from "react";
 import { notFound } from "next/navigation";
+import { CategoryInterface } from "@/types";
 import Category from "@/lib/services/CategoryService";
 
+interface CategoryEditInterface extends CategoryInterface {
+  _id: string;
+}
+
 export default function Form() {
-  const [data, setData] = useState<ProductDataType>({
+  const [data, setData] = useState<CategoryInterface>({
     name: "",
-    price: "",
-    inStock: "",
   });
   const [error, setError] = useState({
     name: "",
-    price: "",
-    inStock: "",
   });
   const [isNotFound, setIsNotFound] = useState(false);
-  const [categories, setCategories] = useState([]);
   const { id } = useParams();
   const { toast } = useToast();
 
   const getProduct = useCallback(async () => {
-    const res = await Product.getOne(id as string);
+    const res = await Category.getOne(id as string);
     if (res.error) {
       toast({
         variant: "destructive",
@@ -39,31 +36,17 @@ export default function Form() {
       });
       setIsNotFound(true);
     }
-    setData(res.product);
+    setData(res.category);
   }, [id, toast]);
-
-  const getCategories = useCallback(async () => {
-    const res = await Category.getAll();
-    if (res.categories) {
-      setCategories(
-        res.categories.map((item: { name: string; _id: string }) => ({
-          ...item,
-          label: item.name,
-          value: item._id,
-        }))
-      );
-    }
-  }, []);
 
   useLayoutEffect(() => {
     if (id) {
       getProduct();
     }
-    getCategories();
-  }, [id, getProduct, getCategories]);
+  }, [id, getProduct]);
 
   async function editProduct() {
-    const res = await Product.edit(data);
+    const res = await Category.edit(data as CategoryEditInterface);
     if (res.error) {
       setError(res.error);
       toast({
@@ -80,7 +63,7 @@ export default function Form() {
     });
   }
   async function createNewProduct() {
-    const res = await Product.create(data);
+    const res = await Category.create(data);
     if (res.error) {
       setError(res.error);
       toast({
@@ -122,63 +105,6 @@ export default function Form() {
             setData((p) => ({ ...p, [e.target.name]: e.target.value }))
           }
           error={error.name}
-        />
-      </div>
-      <div className="mb-4">
-        <Label htmlFor="price">Price*</Label>
-        <Input
-          name="price"
-          id="price"
-          type="number"
-          placeholder="Price (Rs)"
-          className="mt-2"
-          value={data.price}
-          error={error.price}
-          onChange={(e) =>
-            setData((p) => ({ ...p, [e.target.name]: e.target.value }))
-          }
-        />
-      </div>
-      <div className="mb-4">
-        <Label htmlFor="inStock">In Stock*</Label>
-        <Input
-          name="inStock"
-          id="inStock"
-          type="number"
-          placeholder="In Stock"
-          className="mt-2"
-          value={data.inStock}
-          error={error.inStock}
-          onChange={(e) =>
-            setData((p) => ({ ...p, [e.target.name]: e.target.value }))
-          }
-        />
-      </div>
-      <div className="mb-4">
-        <Label htmlFor="categories">Categories</Label>
-        <ReactSelect
-          options={categories}
-          className="mt-2 border-input"
-          isMulti
-          value={data.categories}
-          id="categoriesDropdown"
-          onChange={(value: { label: string; value: string }[]) =>
-            setData((p) => ({
-              ...p,
-              categories: value,
-            }))
-          }
-        />
-      </div>
-      <div className="mb-4">
-        <Label htmlFor="tags">Tags</Label>
-        <ReactSelect
-          className="mt-2 border-input"
-          isMulti
-          value={data.tags}
-          onChange={(value: string[]) =>
-            setData((p) => ({ ...p, tags: value }))
-          }
         />
       </div>
       <div className=" mt-6 pt-6 border-t flex items-center justify-end gap-4">

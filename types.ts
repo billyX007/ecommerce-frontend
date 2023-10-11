@@ -1,23 +1,19 @@
-export type TableProps = {
-  columns: Column[];
-  list: List[];
-};
-
-export type Column = {
-  label: string;
-  search?: boolean;
-  field: string;
-};
-
-export interface ProductInterface {
+export type ProductDataType = {
   _id?: string;
   name: string;
   price: number | string;
   inStock: number | string;
-  categories?: string[];
+  categories?: {
+    name: any; label: string; value: string 
+}[];
   tags?: string[];
-}
+};
 
 export interface List {
-  [key: string]: string | List[] | null;
+  [key: string]: string | List[];
 }
+
+export type CategoryDataType = {
+  _id?: string;
+  name: string;
+};

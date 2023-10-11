@@ -12,15 +12,17 @@ import {
   AlertDialogTrigger,
 } from "@/app/components/ui/alert-dialog";
 import { Button } from "@/app/components/ui/button";
-import Product from "@/lib/services/ProductService";
 import { Trash } from "lucide-react";
-import { toast } from "../ui/use-toast";
 
-export default function DeleteButton({ id }: { id: string }) {
+export default function DeleteButton({
+  handleDelete,
+}: {
+  handleDelete: () => void;
+}) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">
+        <Button variant="destructive" className="px-4 h-8">
           <Trash width={20} height={20} />
         </Button>
       </AlertDialogTrigger>
@@ -34,21 +36,7 @@ export default function DeleteButton({ id }: { id: string }) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={async () => {
-              const result = await Product.delete(id);
-              if (result?.error) {
-                toast({
-                  variant: "destructive",
-                  title: "Something went wrong!",
-                  description: result?.error,
-                });
-                return;
-              }
-            }}
-          >
-            Continue
-          </AlertDialogAction>
+          <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -1,19 +1,16 @@
-import { ProductDataType } from "@/types";
+import { ProductInterface } from "@/types";
 import axios from "axios";
 import { apiUrl } from "../env";
 
-class Product {
+class Category {
   constructor() {}
 
-  static async create(data: ProductDataType) {
+  static async create(data: { name: string }) {
     try {
       const res = await axios({
         method: "post",
-        url: `${apiUrl}/products`,
-        data: {
-          ...data,
-          categories: data.categories?.map((item) => item.value),
-        },
+        url: `${apiUrl}/categories`,
+        data,
         headers: {
           Accept: "application/json",
         },
@@ -29,12 +26,12 @@ class Product {
     try {
       const res = await axios({
         method: "get",
-        url: `${apiUrl}/products`,
+        url: `${apiUrl}/categories`,
         headers: {
           Accept: "application/json",
         },
       });
-      return { products: res.data.products };
+      return { categories: res.data.categories };
     } catch (error: any) {
       return { error: error.response.data.error };
     }
@@ -43,26 +40,22 @@ class Product {
     try {
       const res = await axios({
         method: "get",
-        url: `${apiUrl}/products/${id}`,
+        url: `${apiUrl}/categories/${id}`,
         headers: {
           Accept: "application/json",
         },
       });
-      return { product: res.data.product };
+      return { category: res.data.category };
     } catch (error: any) {
       return { error: error.response.data.error };
     }
   }
-  static async edit(data: ProductDataType) {
-    const { _id, ...rest } = data;
+  static async edit(data: { name: string; _id: string }) {
     try {
       const res = await axios({
         method: "put",
-        url: `${apiUrl}/products/${data._id}`,
-        data: {
-          ...rest,
-          categories: rest.categories?.map((item) => item.value),
-        },
+        url: `${apiUrl}/categories/${data._id}`,
+        data,
         headers: {
           Accept: "application/json",
         },
@@ -76,7 +69,7 @@ class Product {
     try {
       const res = await axios({
         method: "delete",
-        url: `${apiUrl}/products/${id}`,
+        url: `${apiUrl}/categories/${id}`,
         headers: {
           Accept: "application/json",
         },
@@ -87,4 +80,4 @@ class Product {
   }
 }
 
-export default Product;
+export default Category;

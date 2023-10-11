@@ -1,7 +1,7 @@
 import { Metadata } from "next";
-import SideBar from "../components/menu/SideBar";
 import TopBar from "../components/menu/TopBar";
 import { Toaster } from "../components/ui/toaster";
+import Container from "../components/ui/container";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -14,13 +14,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-start overflow-hidden">
-      <SideBar />
-      <div className="flex flex-col flex-1 bg-slate-100 h-screen">
+    <>
+      <div className="flex flex-col flex-1 h-screen">
         <TopBar />
-        <div className="p-4 overflow-y-auto flex-1">{children}</div>
+        <Container className="mt-4">{children}</Container>
       </div>
       <Toaster />
-    </div>
+    </>
   );
 }

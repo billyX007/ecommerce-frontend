@@ -15,7 +15,7 @@ export const productColumns = [
   },
   {
     label: "Categories",
-    field: "cateories",
+    field: "categories",
     search: true,
   },
   {

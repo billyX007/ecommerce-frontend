@@ -20,6 +20,7 @@ export default function LoginForm() {
   const [data, setData] = useState({
     email: "",
     password: "",
+    remember: false,
   });
   const [error, setError] = useState({
     email: "",
@@ -39,7 +40,11 @@ export default function LoginForm() {
     setLoading(true);
     const { token, error } = await Auth.login(data);
     if (token) {
-      setCookie("auth-token", token, 30);
+      if (data.remember) {
+        setCookie("auth-token", token, 30);
+      } else {
+        setCookie("auth-token", token, 0.5);
+      }
       push("/dashboard");
       setLoading(false);
     }
@@ -82,13 +87,19 @@ export default function LoginForm() {
           />
         </div>
         <div className="flex items-center space-x-2">
-          <Checkbox id="terms" />
-          <label
+          <Checkbox
+            id="terms"
+            checked={data.remember}
+            onCheckedChange={(e) => {
+              setData((p) => ({ ...p, remember: e as boolean }));
+            }}
+          />
+          <Label
             htmlFor="terms"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             Remember me
-          </label>
+          </Label>
         </div>
       </CardContent>
       <CardFooter className="flex flex-col">
