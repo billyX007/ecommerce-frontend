@@ -1,3 +1,5 @@
+import { GenericInterface } from "@/types";
+
 export function setCookie(cname: string, cvalue: string, exdays: number) {
   const d = new Date();
   d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
@@ -14,4 +16,16 @@ export function getCreateFormLink(label: string) {
 }
 export function getEditFormLink(label: string, id: string) {
   return `/dashboard/${label.toLowerCase()}/${id}`;
+}
+
+export function getColorClassFromCode(a: string, code: string) {
+  return `${a}-[${code}]`;
+}
+
+export function addLabelToObject(item: GenericInterface) {
+  return {
+    ...item,
+    value: item._id,
+    label: item.name,
+  };
 }

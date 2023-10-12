@@ -6,7 +6,15 @@ import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { useToast } from "@/app/components/ui/use-toast";
 import Product from "@/lib/services/ProductService";
-import { CategoryDataType, CategoryInterface, ProductDataType } from "@/types";
+import {
+  CategoryDataType,
+  CategoryInterface,
+  ColorDataType,
+  ColorInterfaceWithLabel,
+  ProductDataType,
+  TagDataType,
+  TagInterfaceWithLabel,
+} from "@/types";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FormEvent, useState } from "react";
@@ -14,9 +22,13 @@ import { FormEvent, useState } from "react";
 export default function Form({
   productData,
   categories,
+  tags,
+  colors,
 }: {
   productData?: ProductDataType;
   categories: CategoryDataType[];
+  tags: TagDataType[];
+  colors: ColorDataType[];
 }) {
   const [data, setData] = useState<ProductDataType>(
     productData ?? {
@@ -141,12 +153,25 @@ export default function Form({
         />
       </div>
       <div className="mb-4">
+        <Label htmlFor="tags">Colors</Label>
+        <ReactSelect
+          options={colors}
+          className="mt-2 border-input"
+          isMulti
+          value={data.colors}
+          onChange={(value: ColorInterfaceWithLabel[]) =>
+            setData((p) => ({ ...p, colors: value }))
+          }
+        />
+      </div>
+      <div className="mb-4">
         <Label htmlFor="tags">Tags</Label>
         <ReactSelect
+          options={tags}
           className="mt-2 border-input"
           isMulti
           value={data.tags}
-          onChange={(value: string[]) =>
+          onChange={(value: TagInterfaceWithLabel[]) =>
             setData((p) => ({ ...p, tags: value }))
           }
         />

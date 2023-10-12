@@ -8,15 +8,15 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FormEvent, useCallback, useLayoutEffect, useState } from "react";
 import { notFound } from "next/navigation";
-import { CategoryDataType, CategoryInterface } from "@/types";
-import Category from "@/lib/services/CategoryService";
+import { TagDataType } from "@/types";
+import Tag from "@/lib/services/TagService";
 
-interface CategoryEditInterface extends CategoryInterface {
+interface TagInterfaceWithID extends TagDataType {
   _id: string;
 }
 
 export default function Form() {
-  const [data, setData] = useState<CategoryDataType>({
+  const [data, setData] = useState<TagDataType>({
     name: "",
   });
   const [error, setError] = useState({
@@ -27,7 +27,7 @@ export default function Form() {
   const { toast } = useToast();
 
   const getProduct = useCallback(async () => {
-    const res = await Category.getOne(id as string);
+    const res = await Tag.getOne(id as string);
     if (res.error) {
       toast({
         variant: "destructive",
@@ -36,7 +36,7 @@ export default function Form() {
       });
       setIsNotFound(true);
     }
-    setData(res.category);
+    setData(res.tag);
   }, [id, toast]);
 
   useLayoutEffect(() => {
@@ -46,7 +46,7 @@ export default function Form() {
   }, [id, getProduct]);
 
   async function editProduct() {
-    const res = await Category.edit(data as CategoryEditInterface);
+    const res = await Tag.edit(data as TagInterfaceWithID);
     if (res.error) {
       setError(res.error);
       toast({
@@ -63,7 +63,7 @@ export default function Form() {
     });
   }
   async function createNewProduct() {
-    const res = await Category.create(data);
+    const res = await Tag.create(data);
     if (res.error) {
       setError(res.error);
       toast({

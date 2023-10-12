@@ -1,14 +1,14 @@
 import axios from "axios";
 import { apiUrl } from "../env";
 
-class Category {
+class Color {
   constructor() {}
 
   static async create(data: { name: string }) {
     try {
       const res = await axios({
         method: "post",
-        url: `${apiUrl}/categories`,
+        url: `${apiUrl}/colors`,
         data,
         headers: {
           Accept: "application/json",
@@ -25,12 +25,12 @@ class Category {
     try {
       const res = await axios({
         method: "get",
-        url: `${apiUrl}/categories`,
+        url: `${apiUrl}/colors`,
         headers: {
           Accept: "application/json",
         },
       });
-      return { categories: res.data.categories };
+      return { colors: res.data.colors };
     } catch (error: any) {
       return { error: error.response.data.error };
     }
@@ -39,22 +39,23 @@ class Category {
     try {
       const res = await axios({
         method: "get",
-        url: `${apiUrl}/categories/${id}`,
+        url: `${apiUrl}/colors/${id}`,
         headers: {
           Accept: "application/json",
         },
       });
-      return { category: res.data.category };
+      return { color: res.data.color };
     } catch (error: any) {
       return { error: error.response.data.error };
     }
   }
   static async edit(data: { name: string; _id: string }) {
+    const { _id, ...rest } = data;
     try {
       const res = await axios({
         method: "put",
-        url: `${apiUrl}/categories/${data._id}`,
-        data,
+        url: `${apiUrl}/colors/${data._id}`,
+        data: { ...rest },
         headers: {
           Accept: "application/json",
         },
@@ -68,7 +69,7 @@ class Category {
     try {
       const res = await axios({
         method: "delete",
-        url: `${apiUrl}/categories/${id}`,
+        url: `${apiUrl}/colors/${id}`,
         headers: {
           Accept: "application/json",
         },
@@ -79,4 +80,4 @@ class Category {
   }
 }
 
-export default Category;
+export default Color;

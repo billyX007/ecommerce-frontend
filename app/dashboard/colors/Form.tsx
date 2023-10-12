@@ -8,26 +8,28 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FormEvent, useCallback, useLayoutEffect, useState } from "react";
 import { notFound } from "next/navigation";
-import { CategoryDataType, CategoryInterface } from "@/types";
-import Category from "@/lib/services/CategoryService";
+import { ColorDataType } from "@/types";
+import Color from "@/lib/services/ColorService";
 
-interface CategoryEditInterface extends CategoryInterface {
+interface ColorWithIDInterface extends ColorDataType {
   _id: string;
 }
 
 export default function Form() {
-  const [data, setData] = useState<CategoryDataType>({
+  const [data, setData] = useState<ColorDataType>({
     name: "",
+    code: "",
   });
   const [error, setError] = useState({
     name: "",
+    code: "",
   });
   const [isNotFound, setIsNotFound] = useState(false);
   const { id } = useParams();
   const { toast } = useToast();
 
   const getProduct = useCallback(async () => {
-    const res = await Category.getOne(id as string);
+    const res = await Color.getOne(id as string);
     if (res.error) {
       toast({
         variant: "destructive",
@@ -36,7 +38,7 @@ export default function Form() {
       });
       setIsNotFound(true);
     }
-    setData(res.category);
+    setData(res.color);
   }, [id, toast]);
 
   useLayoutEffect(() => {
@@ -46,7 +48,7 @@ export default function Form() {
   }, [id, getProduct]);
 
   async function editProduct() {
-    const res = await Category.edit(data as CategoryEditInterface);
+    const res = await Color.edit(data as ColorWithIDInterface);
     if (res.error) {
       setError(res.error);
       toast({
@@ -63,7 +65,7 @@ export default function Form() {
     });
   }
   async function createNewProduct() {
-    const res = await Category.create(data);
+    const res = await Color.create(data);
     if (res.error) {
       setError(res.error);
       toast({
@@ -105,6 +107,21 @@ export default function Form() {
             setData((p) => ({ ...p, [e.target.name]: e.target.value }))
           }
           error={error.name}
+        />
+      </div>
+      <div className="mb-4">
+        <Label htmlFor="name">Color Code*</Label>
+        <Input
+          name="code"
+          id="code"
+          type="text"
+          placeholder="Name"
+          className="mt-2"
+          value={data.code}
+          onChange={(e) =>
+            setData((p) => ({ ...p, [e.target.name]: e.target.value }))
+          }
+          error={error.code}
         />
       </div>
       <div className=" mt-6 pt-6 border-t flex items-center justify-end gap-4">

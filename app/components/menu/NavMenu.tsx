@@ -24,7 +24,7 @@ const menu = [
   },
   {
     label: "Orders",
-    link: "/orders",
+    link: "/dashboard/orders",
   },
   {
     label: "Settings",
@@ -36,7 +36,6 @@ export default function NavMenu() {
   const pathname = usePathname();
   return (
     <>
-      {" "}
       {menu.map((menuItem, idx) => (
         <li key={`__menuItem${idx}`}>
           <Link
