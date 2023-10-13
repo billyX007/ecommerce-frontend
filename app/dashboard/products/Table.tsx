@@ -23,6 +23,11 @@ export default function Table({ data }: { data: ProductDataType[] }) {
       });
       return;
     }
+    toast({
+      variant: "default",
+      title: "Record Delete!",
+      description: "The record has been successfully deleted",
+    });
   }
 
   const columns: ColumnDef<ProductDataType>[] = [

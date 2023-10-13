@@ -6,6 +6,7 @@ import { Checkbox } from "@/app/components/ui/checkbox";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { useToast } from "@/app/components/ui/use-toast";
+import { getCookie } from "@/lib/helper";
 import Product from "@/lib/services/ProductService";
 import {
   CategoryDataType,
@@ -18,7 +19,7 @@ import {
 } from "@/types";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 
 export default function Form({
   productData,
@@ -52,6 +53,7 @@ export default function Form({
     ":before": {
       backgroundColor: color,
       borderRadius: 10,
+      border: "0.1px solid hsl(var(--foreground))",
       content: '" "',
       display: "block",
       marginRight: 8,
@@ -68,7 +70,11 @@ export default function Form({
         variant: "destructive",
         title: "Something went wrong!",
         description:
-          "It appears the data you provided is not valid. Please recheck the data you have provided.",
+          typeof res.error === "string"
+            ? res.error
+            : Object.keys(res.error).map((item, i) => (
+                <li key={`__error${i}`}>{res.error[item]}</li>
+              )),
       });
       return;
     }
@@ -85,7 +91,11 @@ export default function Form({
         variant: "destructive",
         title: "Something went wrong!",
         description:
-          "It appears the data you provided is not valid. Please recheck the data you have provided.",
+          typeof res.error === "string"
+            ? res.error
+            : Object.keys(res.error).map((item, i) => (
+                <li key={`__error${i}`}>{res.error[item]}</li>
+              )),
       });
       return;
     }
@@ -105,7 +115,7 @@ export default function Form({
   }
 
   return (
-    <form onSubmit={handleSubmitForm}>
+    <form onSubmit={handleSubmitForm} encType="mutipart/form-data">
       <div className="mb-4">
         <Label htmlFor="name">Name*</Label>
         <Input

@@ -24,6 +24,11 @@ async function handleDelete(id: string) {
     });
     return;
   }
+  toast({
+    variant: "default",
+    title: "Record Delete!",
+    description: "The record has been successfully deleted",
+  });
 }
 
 const columns: ColumnDef<CategoryDataType>[] = [

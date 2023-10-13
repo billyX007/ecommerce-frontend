@@ -1,35 +1,20 @@
-import axios from "axios";
-import { apiUrl } from "../env";
+import axios from "../axios";
+import { GenericInterface } from "@/types";
 
 class Category {
   constructor() {}
-
-  static async create(data: { name: string }) {
+  static async create(data: GenericInterface) {
     try {
-      const res = await axios({
-        method: "post",
-        url: `${apiUrl}/categories`,
-        data,
-        headers: {
-          Accept: "application/json",
-        },
-      });
+      const res = await axios.post("/categories", data);
       return { product: res.data };
     } catch (error: any) {
-      console.log(error.message);
       return { error: error.response.data.error };
     }
   }
 
   static async getAll() {
     try {
-      const res = await axios({
-        method: "get",
-        url: `${apiUrl}/categories`,
-        headers: {
-          Accept: "application/json",
-        },
-      });
+      const res = await axios.get("/categories");
       return { categories: res.data.categories };
     } catch (error: any) {
       return { error: error.response.data.error };
@@ -37,28 +22,15 @@ class Category {
   }
   static async getOne(id: string) {
     try {
-      const res = await axios({
-        method: "get",
-        url: `${apiUrl}/categories/${id}`,
-        headers: {
-          Accept: "application/json",
-        },
-      });
+      const res = await axios.get(`/categories/${id}`);
       return { category: res.data.category };
     } catch (error: any) {
       return { error: error.response.data.error };
     }
   }
-  static async edit(data: { name: string; _id: string }) {
+  static async edit({ name, _id }: { name: string; _id: string }) {
     try {
-      const res = await axios({
-        method: "put",
-        url: `${apiUrl}/categories/${data._id}`,
-        data,
-        headers: {
-          Accept: "application/json",
-        },
-      });
+      const res = await axios.put(`/categories/${_id}`, { name });
       return { product: res.data.product };
     } catch (error: any) {
       return { error: error.response.data.error };
@@ -66,13 +38,7 @@ class Category {
   }
   static async delete(id: string) {
     try {
-      const res = await axios({
-        method: "delete",
-        url: `${apiUrl}/categories/${id}`,
-        headers: {
-          Accept: "application/json",
-        },
-      });
+      await axios.delete(`/categories/${id}`);
     } catch (error: any) {
       return { error: error.response.data.error };
     }

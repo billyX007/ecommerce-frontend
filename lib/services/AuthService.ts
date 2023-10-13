@@ -1,5 +1,4 @@
-import axios from "axios";
-import { apiUrl } from "../env";
+import axios from "../axios";
 
 interface LoginCredentials {
   email: string;
@@ -8,17 +7,9 @@ interface LoginCredentials {
 
 const Auth = {
   login: async function ({ email, password }: LoginCredentials) {
-    const url = `${apiUrl}/login`;
+    const data = { email, password };
     try {
-      const res = await axios({
-        url,
-        method: "post",
-        headers: {
-          Accept: "application/json",
-        },
-        data: { email, password },
-      });
-
+      const res = await axios.post("/login", data);
       return { token: res.data.token };
     } catch (error: any) {
       return { error: error.response.data.error };

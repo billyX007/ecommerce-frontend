@@ -85,12 +85,12 @@
   @apply text-[hsl(var(--foreground))]  !important;
 }
 .custom-select__menu-list {
-  @apply text-sm text-[hsl(var(--foreground))] bg-[hsl(var(--accent))] rounded-md  !important;
+  @apply text-sm text-[hsl(var(--foreground))] bg-[hsl(var(--background))] rounded-md  !important;
 }
 .custom-select__menu {
   @apply bg-transparent !important;
 }
 
 .custom-select__option {
-  @apply bg-[hsl(var(--accent))] cursor-pointer hover:opacity-70 !important;
+  @apply bg-[hsl(var(--background))] cursor-pointer hover:bg-[hsl(var(--muted))] !important;
 }
