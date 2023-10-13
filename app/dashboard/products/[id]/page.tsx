@@ -3,35 +3,25 @@ import Form from "../Form";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Product from "@/lib/services/ProductService";
 import { notFound } from "next/navigation";
-import Category from "@/lib/services/CategoryService";
-import Color from "@/lib/services/ColorService";
-import Tag from "@/lib/services/TagService";
 import { addLabelToObject } from "@/lib/helper";
+import Filter from "@/lib/services/FilterService";
 
 export default async function page({ params }: { params: Params }) {
   const productPromise = Product.getOne(params.id);
-  const categoriesPromise = Category.getAll();
-  const colorPromise = Color.getAll();
-  const tagPromise = Tag.getAll();
-  const [productRes, categoriesRes, colorRes, tagRes] =
-    await Promise.allSettled([
-      productPromise,
-      categoriesPromise,
-      colorPromise,
-      tagPromise,
-    ]);
+  const filterPromise = Filter.getFilters();
+  const [productRes, filterRes] = await Promise.allSettled([
+    productPromise,
+    filterPromise,
+  ]);
   let product, categories, tags, colors;
   if (productRes.status == "fulfilled") {
     product = productRes.value.product;
   }
-  if (categoriesRes.status == "fulfilled") {
-    categories = categoriesRes.value.categories;
-  }
-  if (colorRes.status == "fulfilled") {
-    colors = colorRes.value.colors;
-  }
-  if (tagRes.status == "fulfilled") {
-    tags = tagRes.value.tags;
+
+  if (filterRes.status === "fulfilled") {
+    categories = filterRes.value.categories;
+    tags = filterRes.value.tags;
+    colors = filterRes.value.colors;
   }
 
   if (productRes.status === "rejected") {

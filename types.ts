@@ -6,6 +6,7 @@ export type ProductDataType = {
   categories?: CategoryInterface[];
   tags?: TagInterfaceWithLabel[];
   colors?: ColorInterfaceWithLabel[];
+  is_featured?: boolean;
 };
 
 export interface List {

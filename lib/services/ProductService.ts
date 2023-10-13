@@ -64,6 +64,8 @@ class Product {
         data: {
           ...rest,
           categories: rest.categories?.map((item) => item.value),
+          tags: rest.tags?.map((item) => item.value),
+          colors: rest.colors?.map((item) => item.value),
         },
         headers: {
           Accept: "application/json",

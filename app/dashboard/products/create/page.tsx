@@ -1,30 +1,10 @@
 import React from "react";
 import Form from "../Form";
-import Category from "@/lib/services/CategoryService";
-import Color from "@/lib/services/ColorService";
-import Tag from "@/lib/services/TagService";
 import { addLabelToObject } from "@/lib/helper";
+import Filter from "@/lib/services/FilterService";
 
 export default async function Page() {
-  const categoriesPromise = Category.getAll();
-  const colorPromise = Color.getAll();
-  const tagPromise = Tag.getAll();
-  const [categoriesRes, colorRes, tagRes] = await Promise.allSettled([
-    categoriesPromise,
-    colorPromise,
-    tagPromise,
-  ]);
-  let categories, tags, colors;
-
-  if (categoriesRes.status == "fulfilled") {
-    categories = categoriesRes.value.categories;
-  }
-  if (colorRes.status == "fulfilled") {
-    colors = colorRes.value.colors;
-  }
-  if (tagRes.status == "fulfilled") {
-    tags = tagRes.value.tags;
-  }
+  const { categories, tags, colors } = await Filter.getFilters();
 
   return (
     <div className="rounded-md shadow-sm">

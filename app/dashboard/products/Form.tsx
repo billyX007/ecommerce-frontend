@@ -2,6 +2,7 @@
 
 import ReactSelect from "@/app/components/form/ReactSelect";
 import { Button } from "@/app/components/ui/button";
+import { Checkbox } from "@/app/components/ui/checkbox";
 import { Input } from "@/app/components/ui/input";
 import { Label } from "@/app/components/ui/label";
 import { useToast } from "@/app/components/ui/use-toast";
@@ -17,7 +18,7 @@ import {
 } from "@/types";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 export default function Form({
   productData,
@@ -44,6 +45,20 @@ export default function Form({
   });
   const { id } = useParams();
   const { toast } = useToast();
+
+  const dot = (color = "transparent") => ({
+    "alignItems": "center",
+    "display": "flex",
+    ":before": {
+      backgroundColor: color,
+      borderRadius: 10,
+      content: '" "',
+      display: "block",
+      marginRight: 8,
+      height: 16,
+      width: 16,
+    },
+  });
 
   async function editProduct() {
     const res = await Product.edit(data);
@@ -159,6 +174,26 @@ export default function Form({
           className="mt-2 border-input"
           isMulti
           value={data.colors}
+          styles={{
+            option: (
+              styles: { [x: string]: string },
+              data: {
+                data: ColorInterfaceWithLabel;
+              }
+            ) => ({
+              ...styles,
+              ...dot(data.data.code),
+            }),
+            multiValueLabel: (
+              styles: { [x: string]: string },
+              data: {
+                data: ColorInterfaceWithLabel;
+              }
+            ) => ({
+              ...styles,
+              ...dot(data.data.code),
+            }),
+          }}
           onChange={(value: ColorInterfaceWithLabel[]) =>
             setData((p) => ({ ...p, colors: value }))
           }
@@ -175,6 +210,20 @@ export default function Form({
             setData((p) => ({ ...p, tags: value }))
           }
         />
+      </div>
+      <div className="mb-4 flex items-center gap-2">
+        <Checkbox
+          name="is_featured"
+          id="is_featured"
+          checked={data.is_featured}
+          onCheckedChange={(checked) =>
+            setData((p) => ({
+              ...p,
+              is_featured: checked as boolean,
+            }))
+          }
+        />
+        <Label htmlFor="is_featured">Featured Product</Label>
       </div>
       <div className=" mt-6 pt-6 border-t flex items-center justify-end gap-4">
         <Link href="/dashboard/products">
